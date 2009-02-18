@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>Hello Prototype!</title>
+
+    <script type="text/javascript" src="javascripts/prototype.js"></script>
+    <script type="text/javascript" src="javascripts/Ninja.js"></script>
+    
+  </head>
+  <body>
+    <h1>Ninja Database <span id="status"></span></h1>
+    
+    <script type="text/javascript" charset="utf-8">
+      var ninjas = [];
+      
+      document.observe("dom:loaded", function() {
+        loadData();
+      });
+      
+      function loadData() {
+        ninjas.invoke('remove');
+        
+        ninjas = [];
+        
+        $('status').update("loading…");
+        
+        new Ajax.Request('ninja_database.js', {
+          method: 'get',
+          onSuccess: function(transport) {
+            //setting the timeout to simulate an actual server response
+            setTimeout(function(){
+              $('status').update('<a href="javascript:loadData()">reload</a>');
+              transport.responseText.evalJSON().each(function(ninja_data) {
+                var ninja = new Ninja(ninja_data);
+                $(document.body).insert(ninja);
+                ninjas.push(ninja);
+              });
+              
+            }, 1000);
+          }
+        });
+      }
+    </script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div id="docs">
+      <h3>Ninja Object Reference</h3>
+      
+      <p><strong>create a new ninja</strong> <code>var a = new Ninja({name: <i>string</i>, abilities: [<i>string</i>, <i>string</i>]});</code></p>
+      
+      <p><strong>insert into document</strong> <code>$(document.body).insert(a);</code></p>
+      
+      <p><strong>set the name</strong> <code>a.setName(<i>string</i>);</code></p>
+      
+      <p><strong>add a new ability</strong> <code>a.addAbility(<i>string</i>);</code></p>
+      
+      <p><strong>remove an ability</strong> <code>a.removeAbility(<i>index</i>);</code></p>
+
+      <p><strong>remove from document</strong> <code>a.remove();</code></p>
+    </div>
+    
+    <style type="text/css" media="screen">
+      body {
+        padding-right:350px;
+        
+      }
+      
+      #docs {
+        width:350px;
+        position:fixed;
+        right:0;
+        top:0;
+        background:#cccccc;
+        padding:10px;
+      }
+      
+      code {
+        display:block;
+      }
+      
+      .ninja {
+        background:#000;
+        width:300px;
+        color:#fff;
+        padding:10px;
+        margin-bottom:1px;
+        margin-right:1px;
+        float:left;
+      }
+        .ninja h2 {
+          margin-bottom:0;
+          text-align:center;
+        }
+        
+        .ninja a:link, .ninja a:visited {
+          color:#ff0000;
+        }
+    </style>
+    
+  </body>
+</html>

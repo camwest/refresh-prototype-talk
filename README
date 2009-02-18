@@ -1,0 +1,2 @@
+/public/index.html <- Demonstrates, AJAX, Invoke, Element#update, dom:loaded
+/public/javascripts/Ninja.js <- Demonstrates class creation, optional parameters, custom events, string interpolation, element creation, closures, collect, each, Element#insert
